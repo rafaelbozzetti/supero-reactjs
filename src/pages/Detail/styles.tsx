@@ -23,7 +23,7 @@ export const BookInfo = styled.div`
     max-width: 80%;
     margin: 10px auto 0px auto;
     background-color: #f1f1f1;
-    padding: 10px;
+    padding: 20px;
     border-radius: 5px;
 
     h1 {
@@ -31,8 +31,7 @@ export const BookInfo = styled.div`
     }
 
     strong {
-        color: #696969;
-        font-weight: normal;
+        color: #000;
     }
 
     p {
@@ -42,7 +41,24 @@ export const BookInfo = styled.div`
 
     table {
         width: 100%;
-        margin-bottom: 20px;
+        font-size: 15px;
+        border: 1px solid #f1f1f1;
+        padding: 5px 0px;
+
+        thead {
+            font-weight: bolder;
+            background: #f1f1f1;
+        }
+        td {
+            height: 30px;
+            padding: 10px 0px;
+        }
+        a {
+            color: #F16550;
+            font-size: 16px;
+            font-weight: bolder;
+            text-decoration: none;
+        }
     }
 
     a {

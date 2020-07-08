@@ -51,32 +51,30 @@ const Detail: React.FC = () => {
           <h1>{book.titulo}</h1>
           <strong>Autor: {book.autor}</strong>
 
-          <p>Informações do Livro:</p>
-
           <table>
             <tr>
               <td>ISBN</td>
-              <td> {book.isbn} </td>
+              <td> <strong>{book.isbn}</strong> </td>
             </tr>
             <tr>
               <td>Editora</td>
-              <td> {book.editora} </td>
+              <td> <strong>{book.editora}</strong> </td>
             </tr>            
             <tr>
               <td>Ano</td>
-              <td> {book.ano} </td>
+              <td> <strong>{book.ano}</strong> </td>
             </tr>    
             <tr>
               <td>Idioma</td>
-              <td> {book.idioma} </td>
+              <td> <strong>{book.idioma}</strong> </td>
             </tr>              
             <tr>
               <td>Peso</td>
-              <td> {book.peso} </td>
+              <td> <strong>{book.peso}g</strong> </td>
             </tr>            
             <tr>
-              <td>Dimensões:</td>
-              <td> {book.comprimento} x  {book.largura} x {book.altura}</td>
+              <td>Dimensões (C x L x A):</td>
+              <td> <strong>{book.comprimento}cm</strong> x  <strong>{book.largura}cm</strong> x <strong>{book.altura}cm</strong></td>
             </tr>                                          
           </table>
 

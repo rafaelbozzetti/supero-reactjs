@@ -1,8 +1,14 @@
-import React, {useState, useEffect, MouseEvent} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Container, SearchHeader, SearchInput, SubmitButton, Filters, Results } from './styles';
 import { Link } from 'react-router-dom';
-import { Pagination } from '@material-ui/lab';
-import TablePagination from '@material-ui/core/TablePagination';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+import Pagination from '@material-ui/lab/Pagination';
 import LogoSupero from '../../assets/img/supero_cor.svg';
 import { FiCalendar } from 'react-icons/fi';
 import api from '../../services/api';
@@ -20,6 +26,9 @@ interface Livro {
     autor: string;
     editora: string;
 }
+
+interface Event {}
+interface Props {}
 
 const Search: React.FC = () => {
 
@@ -40,31 +49,26 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('@SuperaBooks:searchString', JSON.stringify(searchString));
-    handleSearch();
   }, [searchString]);
 
+  
   async function handleSearch() {
     if(searchString.length !== 0) {
-      const response = await api.get<LivroPayload>(`/api/Livros?Busca=${searchString}`);
-      const {items, totalCount } = response.data;
-    
-      // const books = items.map<Livro>( (book:Livro) => {
-      //   if( book.ano >= startYear && book.ano <= endYear) {
-      //     return book;
-      //   }
-      // });
 
+      const skipCount = (page === 1 ? 0 : page * 10);
+      const queryParams = `/api/Livros?Busca=${searchString}&AnoInicial=${startYear}&AnoFinal=${endYear}&MaxResultCount=10&SkipCount=${skipCount}`
+
+      const response = await api.get<LivroPayload>(queryParams);
+      const {items, totalCount } = response.data;
       setBooks(items);
       setTotal(totalCount);
     }
   }
 
-  function handleChangePage(event: MouseEvent<HTMLButtonElement>) {
-
-    console.log(event);
-
-    setPage(1);
-  }
+  const handleChangePage = useCallback((event:Event, value:number) => {
+    setPage(value);
+    //handleSearch()
+  }, []);
 
   return (
     <Container>
@@ -81,48 +85,41 @@ const Search: React.FC = () => {
           <span>até</span> 
           <input type="text" value={endYear}  onChange={(e) => setEndYear(e.target.value)} name="to" />
           <FiCalendar size={20} />
-
         </div>
         <div>{total} resultados encontrados</div>
       </Filters>
       <Results>
           {books.length > 0 && 
-            <>
-              <table>
-                <thead>
-                  <tr>
-                    <td>Livro</td>
-                    <td>Autor</td>
-                    <td>Editora</td>
-                    <td>Ano</td>
-                    <td>Ações</td>
-                  </tr>
-                </thead>
-                <tbody>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell> Livro </TableCell>
+                    <TableCell> Autor </TableCell>
+                    <TableCell> Editora </TableCell>
+                    <TableCell> Ano </TableCell>
+                    <TableCell> Ações </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   { books && books.map((book) => (
-                      <tr key={book.id}>
-                        <td> {book.titulo} </td>
-                        <td> {book.autor} </td>
-                        <td> {book.editora} </td>
-                        <td> {book.ano} </td>
-                        <td>
-                          <Link to={`/detail/${book.id}`}>Detalhes</Link>
-                        </td>
-                      </tr>
+                      <TableRow key={book.id}>
+                        <TableCell> {book.titulo} </TableCell>
+                        <TableCell> {book.autor} </TableCell>
+                        <TableCell> {book.editora} </TableCell>
+                        <TableCell> {book.ano} </TableCell>
+                        <TableCell>
+                            <Link to={`/detail/${book.id}`}> Detalhes</Link>
+                        </TableCell>
+                      </TableRow>
                   ))}
-                </tbody>
-              </table>
-              <TablePagination
-                component="div"
-                count={total}
-                page={page}
-                onChangePage={() => handleChangePage}
-                rowsPerPage={10}
-                rowsPerPageOptions={[10]}
-              />              
-            </>
+                </TableBody>
+              </Table>
+              <div>
+                <Pagination shape="rounded" count={total} page={page} onChange={handleChangePage} />
+              </div>              
+            </TableContainer>
           }
-        {page}
       </Results>
     </Container>
   );

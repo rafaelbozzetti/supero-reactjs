@@ -41,6 +41,10 @@ export const Results = styled.div`
     padding: 10px;
     background-color: #fff;
 
+    div {
+        margin-top:20px;
+    }
+
     table {
         width: 100%;
         font-size: 15px;
@@ -62,6 +66,7 @@ export const Results = styled.div`
             text-decoration: none;
         }
     }
+
 `;
 
 export const Filters = styled.div`
@@ -72,7 +77,6 @@ export const Filters = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
 
     span {
         margin: 0 20px;
@@ -80,8 +84,15 @@ export const Filters = styled.div`
 
     div {
         flex: 1;
+        svg {
+            padding-top: 3px;
+        }
+
+        & + div {
+            text-align: right;
+        }
     }
-    
+
     input {
         width: 80px;
         height: 25px;
