@@ -25,6 +25,11 @@ export const SearchInput = styled.input`
     border-radius: 5px;
     border: 1px solid #f88572;
     color: #696969;
+    justify-content: center;
+    
+    &::placeholder {
+        color: #d2d2d2;
+    }
 `;
 
 export const SubmitButton = styled.button`
@@ -85,7 +90,7 @@ export const Filters = styled.div`
     div {
         flex: 1;
         svg {
-            padding-top: 3px;
+            padding-top: 5px;
         }
 
         & + div {

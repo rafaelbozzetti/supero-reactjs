@@ -32,10 +32,9 @@ interface Props {}
 
 const Search: React.FC = () => {
 
-  const [startYear, setStartYear] = useState('1970');
-  const [endYear, setEndYear] = useState('2020');
   const [books, setBooks] = useState<Livro[]>([]);
   const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [page, setPage] = React.useState(1);
   const [searchString, setSearchString] = useState(() => {
@@ -46,44 +45,81 @@ const Search: React.FC = () => {
         return '';
     }
   });
+  const [startYear, setStartYear] = useState(() => {
+    const startYearString = localStorage.getItem('@SuperaBooks:startYear');
+    if(startYearString) {
+      return JSON.parse(startYearString);
+    }else{
+        return '1970';
+    }
+  });
+  const [endYear, setEndYear] = useState(() => {
+    const endYearString = localStorage.getItem('@SuperaBooks:endYear');
+    if(endYearString) {
+      return JSON.parse(endYearString);
+    }else{
+        return '2020';
+    }
+  });
+
 
   useEffect(() => {
     localStorage.setItem('@SuperaBooks:searchString', JSON.stringify(searchString));
   }, [searchString]);
 
+  useEffect(() => {
+    localStorage.setItem('@SuperaBooks:startYear', JSON.stringify(startYear));
+  }, [startYear]);
+
+  useEffect(() => {
+    localStorage.setItem('@SuperaBooks:endYear', JSON.stringify(endYear));
+  }, [endYear]);
+
+  // useEffect(() => {
+  //   handleSearch();
+  // }, [page]);
   
   async function handleSearch() {
     if(searchString.length !== 0) {
 
-      const skipCount = (page === 1 ? 0 : page * 10);
+      const skipCount = (page === 1 ? 0 : (page -1) * 10);
       const queryParams = `/api/Livros?Busca=${searchString}&AnoInicial=${startYear}&AnoFinal=${endYear}&MaxResultCount=10&SkipCount=${skipCount}`
 
       const response = await api.get<LivroPayload>(queryParams);
       const {items, totalCount } = response.data;
       setBooks(items);
       setTotal(totalCount);
+
+      const totalPages = Math.round(totalCount / 10);
+      if(page > totalPages) {
+        const totalSetPage = ( totalPages === 0 ? 1 : totalPages);
+        setPage(totalSetPage);
+      }
+      setTotalPages(totalPages);
+    }else{
+      setBooks([]);
     }
   }
 
   const handleChangePage = useCallback((event:Event, value:number) => {
     setPage(value);
-    //handleSearch()
+    handleSearch();
   }, []);
 
   return (
     <Container>
       <SearchHeader>
         <img src={LogoSupero} alt="Supero" />
-        <SearchInput value={searchString} onChange={(e) => setSearchString(e.target.value)} />
+        <SearchInput placeholder="Busca" value={searchString} onChange={(e) => setSearchString(e.target.value)} />
         <SubmitButton onClick={handleSearch}>Buscar</SubmitButton>
       </SearchHeader>
       <Filters>
         <div>
           Filtrar ano de publicação:
-          <input type="text" value={startYear} onChange={(e) => setStartYear(e.target.value)} name="from" />
+  <input type="text" value={startYear} min="1970" max="2020" onChange={(e) =>  setStartYear(e.target.value)} name="from" />
           <FiCalendar size={20} />
           <span>até</span> 
-          <input type="text" value={endYear}  onChange={(e) => setEndYear(e.target.value)} name="to" />
+          <input type="text" value={endYear} min="1970" max="2020" onChange={(e) => setEndYear(e.target.value)} name="to" />
           <FiCalendar size={20} />
         </div>
         <div>{total} resultados encontrados</div>
@@ -116,14 +152,16 @@ const Search: React.FC = () => {
                 </TableBody>
               </Table>
               <div>
-                <Pagination shape="rounded" count={total} page={page} onChange={handleChangePage} />
+                <Pagination shape="rounded" count={totalPages} page={page} onChange={handleChangePage} />
               </div>              
             </TableContainer>
           }
+          {books.length === 0 &&
+            <div>Nenhum registro</div>
+          }          
       </Results>
     </Container>
   );
 };
 
-  
 export default Search;
