@@ -43,9 +43,23 @@ export const Results = styled.div`
 
     table {
         width: 100%;
-        font-size: 10px;
+        font-size: 15px;
+        border: 1px solid #f1f1f1;
+        padding: 5px;
+
         thead {
             font-weight: bolder;
+            background: #f1f1f1;
+        }
+        td {
+            height: 50px;
+            padding: 10px;
+        }
+        a {
+            color: #F16550;
+            font-size: 16px;
+            font-weight: bolder;
+            text-decoration: none;
         }
     }
 `;
@@ -58,6 +72,7 @@ export const Filters = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
+    justify-content: space-around;
 
     span {
         margin: 0 20px;
@@ -65,7 +80,6 @@ export const Filters = styled.div`
 
     div {
         flex: 1;
-        justify-content: right;
     }
     
     input {
