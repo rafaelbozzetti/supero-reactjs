@@ -3,7 +3,7 @@
 Mecanismo de busca de livros com interface de pesquisa e detalhes de cada livro.
 
 ## Dependências
- * NodeJs 10
+ * NodeJS 10
  * Yarn 1.22
 
 ## Instalação
