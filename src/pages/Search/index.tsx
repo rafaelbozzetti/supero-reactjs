@@ -62,7 +62,6 @@ const Search: React.FC = () => {
     }
   });
 
-
   useEffect(() => {
     localStorage.setItem('@SuperaBooks:searchString', JSON.stringify(searchString));
   }, [searchString]);
@@ -75,15 +74,22 @@ const Search: React.FC = () => {
     localStorage.setItem('@SuperaBooks:endYear', JSON.stringify(endYear));
   }, [endYear]);
 
-  // useEffect(() => {
-  //   handleSearch();
-  // }, [page]);
+  useEffect(() => {
+    handleSearch();
+  }, []);
   
+  useEffect(() => {
+    handleSearch();
+  }, [page]);
+
   async function handleSearch() {
     if(searchString.length !== 0) {
 
       const skipCount = (page === 1 ? 0 : (page -1) * 10);
       const queryParams = `/api/Livros?Busca=${searchString}&AnoInicial=${startYear}&AnoFinal=${endYear}&MaxResultCount=10&SkipCount=${skipCount}`
+
+      console.log(page);
+      console.log(queryParams);
 
       const response = await api.get<LivroPayload>(queryParams);
       const {items, totalCount } = response.data;
@@ -103,7 +109,6 @@ const Search: React.FC = () => {
 
   const handleChangePage = useCallback((event:Event, value:number) => {
     setPage(value);
-    handleSearch();
   }, []);
 
   return (
