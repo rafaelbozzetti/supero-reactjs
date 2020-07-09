@@ -88,9 +88,6 @@ const Search: React.FC = () => {
       const skipCount = (page === 1 ? 0 : (page -1) * 10);
       const queryParams = `/api/Livros?Busca=${searchString}&AnoInicial=${startYear}&AnoFinal=${endYear}&MaxResultCount=10&SkipCount=${skipCount}`
 
-      console.log(page);
-      console.log(queryParams);
-
       const response = await api.get<LivroPayload>(queryParams);
       const {items, totalCount } = response.data;
       setBooks(items);
