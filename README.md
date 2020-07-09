@@ -30,7 +30,8 @@ Acesso deve ser feito pelo endereço local ```http://localhost:3000```
 
 ## Telas
 
-
+### Componente Search
 ![Search Component](https://raw.githubusercontent.com/rafaelbozzetti/supero-reactjs/master/src/assets/img/SearchComponent.png)
 
+### Componente Detail
 ![Detail COmponent](https://raw.githubusercontent.com/rafaelbozzetti/supero-reactjs/master/src/assets/img/DetailComponent.png)
