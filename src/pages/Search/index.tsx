@@ -35,6 +35,7 @@ const Search: React.FC = () => {
   const [books, setBooks] = useState<Livro[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [inputError, setInputError] = useState('');
 
   const [page, setPage] = React.useState(1);
   const [searchString, setSearchString] = useState(() => {
@@ -83,22 +84,31 @@ const Search: React.FC = () => {
   }, [page]);
 
   async function handleSearch() {
+
+    setInputError('');
+
     if(searchString.length !== 0) {
 
       const skipCount = (page === 1 ? 0 : (page -1) * 10);
       const queryParams = `/api/Livros?Busca=${searchString}&AnoInicial=${startYear}&AnoFinal=${endYear}&MaxResultCount=10&SkipCount=${skipCount}`
 
-      const response = await api.get<LivroPayload>(queryParams);
-      const {items, totalCount } = response.data;
-      setBooks(items);
-      setTotal(totalCount);
+      try {
+        const response = await api.get<LivroPayload>(queryParams);
+        const {items, totalCount } = response.data;
+        setBooks(items);
+        setTotal(totalCount);
+  
+        const totalPages = Math.round(totalCount / 10);
+        if(page > totalPages) {
+          const totalSetPage = ( totalPages === 0 ? 1 : totalPages);
+          setPage(totalSetPage);
+        }
+        setTotalPages(totalPages);
 
-      const totalPages = Math.round(totalCount / 10);
-      if(page > totalPages) {
-        const totalSetPage = ( totalPages === 0 ? 1 : totalPages);
-        setPage(totalSetPage);
+      }catch(err) {
+        setInputError('Erro ao realizar chamada a API');
       }
-      setTotalPages(totalPages);
+
     }else{
       setBooks([]);
     }
@@ -160,7 +170,10 @@ const Search: React.FC = () => {
           }
           {books.length === 0 &&
             <div>Nenhum registro</div>
-          }          
+          }
+          {inputError && 
+            <div>{inputError}</div>
+          }
       </Results>
     </Container>
   );

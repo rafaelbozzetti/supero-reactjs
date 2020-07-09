@@ -1,7 +1,30 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    
+`;
+
+export const Error = styled.div`
+    padding: 20px;
+
+    div {
+        margin-top:20px;
+        border: 1px solid #f6f6f6;
+        background-color: #fbfbfb;
+        padding: 10px;
+        border-radius: 5px;
+        color: #696969;
+        margin-bottom: 20px;
+    }
+    a {
+        color: #F16550;
+        font-size: 16px;
+        font-weight: bolder;
+        text-decoration: none;
+
+        svg {
+           padding-top: 5px; 
+        }
+    }
 `;
 
 export const SearchHeader = styled.div`

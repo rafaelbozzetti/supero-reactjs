@@ -5,7 +5,7 @@ import { FiChevronLeft } from 'react-icons/fi';
 
 import api from '../../services/api';
 
-import { Container, SearchHeader, BookInfo } from './styles';
+import { Container, SearchHeader, BookInfo, Error } from './styles';
 
 interface BookParams  {
   book: string;
@@ -34,10 +34,10 @@ const Detail: React.FC = () => {
   useEffect(() => {
 
     api.get(`/api/Livros/${params.book}`).then(response => {
-        setBook(response.data);
+      setBook(response.data);
     });
 
-  },[params.book]);  
+  },[params.book]);
   
 
   return (
@@ -45,7 +45,6 @@ const Detail: React.FC = () => {
       <SearchHeader>
         <img src={LogoSupero} alt="Supero" />
       </SearchHeader>
-
       { book && (
         <BookInfo>
           <h1>{book.titulo}</h1>
@@ -77,11 +76,17 @@ const Detail: React.FC = () => {
               <td> <strong>{book.comprimento}cm</strong> x  <strong>{book.largura}cm</strong> x <strong>{book.altura}cm</strong></td>
             </tr>                                          
           </table>
-
           <Link to="/"> <FiChevronLeft size={20} /> Voltar</Link>
-
         </BookInfo>
       )}
+
+        {book == null && 
+          <Error>
+            <div>Nenhuma informação</div>
+            <Link to="/"> <FiChevronLeft size={20} /> Voltar</Link>
+          </Error>
+        }
+
     </Container>
   );
 }
