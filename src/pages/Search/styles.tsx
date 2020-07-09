@@ -38,6 +38,11 @@ export const SubmitButton = styled.button`
     background-color: #fff;
     border: 1px solid #f88572;
     border-radius: 5px;
+    transition: background-color 0.2s;
+
+    &:hover{
+        background-color: #ffc9c0;
+    }
 `;
 
 export const Results = styled.div`
@@ -48,6 +53,11 @@ export const Results = styled.div`
 
     div {
         margin-top:20px;
+        border: 1px solid #f6f6f6;
+        background-color: #fbfbfb;
+        padding: 10px;
+        border-radius: 5px;
+        color: #696969;
     }
 
     table {
@@ -70,6 +80,17 @@ export const Results = styled.div`
             font-weight: bolder;
             text-decoration: none;
         }
+
+        tbody {
+            tr {
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: #fff;
+                }
+            }
+        }
+
     }
 
 `;
